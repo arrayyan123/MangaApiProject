@@ -9,18 +9,11 @@ use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 use App\Http\Controllers\MangaController;
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-
-Route::get('/', [PostController::class,'index'])->name('home');
+Route::get('/', [PostController::class, 'index'])->name('home');
+Route::get('/mangadetail/{mangaId}/feed', [PostController::class, 'mangadetail'])->name('mangadetail');
 Route::post('/api/mangadex-proxy', [MangaController::class, 'getMangaDataFromMangadex']);
 Route::get('/api/cover/{coverArtId}', [MangaController::class, 'getCoverImage']);
+Route::get('/api/manga/{mangaId}', [MangaController::class, 'getMangaDetail']);
 Route::get('/api/mangadex-proxy', function () {
     try {
         $title = request('title');
@@ -38,14 +31,5 @@ Route::get('/api/mangadex-proxy', function () {
         return response()->json(['error' => 'Failed to fetch manga data: ' . $e->getMessage()], 500);
     }
 });
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
 
 require __DIR__.'/auth.php';
