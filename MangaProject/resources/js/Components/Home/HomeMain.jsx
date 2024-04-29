@@ -1,21 +1,22 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import MangaDetail from '../../Pages/Posts/MangaDetail';
 
-const BASE_URL = 'http://127.0.0.1:8000/api/mangadex-proxy';
+
+const BASE_URL = 'http://localhost:8000/api/mangadex-proxy';
 
 function HomeMain() {
     const [mangaData, setMangaData] = useState(null);
+    const [selectedMangaId, setSelectedMangaId] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resp = await axios.get(BASE_URL, {
+                const resp = await axios.get(`${BASE_URL}`, {
                     headers: {
                         'User-Agent': 'MyMangaApp/1.0'
                     }
                 });
-                console.log('Response from API:', resp.data);
                 setMangaData(resp.data);
             } catch (error) {
                 console.error('Error fetching manga data:', error);
@@ -26,19 +27,19 @@ function HomeMain() {
     }, []);
 
     const handleMangaClick = (mangaId) => {
-        const url = `/mangadetail/${mangaId}/feed`;
-        console.log('Clicked manga URL:', url);
-        window.location.href = url;
+        setSelectedMangaId(mangaId);    
     };
 
     return (
-        <>
-            <div className='mt-[100px]'>
-                <div className='grid md:grid-cols-3 grid-cols-1 m-10 gap-4'>
+        <div className='mt-[120px]'>
+            {selectedMangaId ? (
+                <MangaDetail mangaId={selectedMangaId} />
+            ) : (
+                <div className='grid md:grid-cols-3 grid-cols-1 gap-4 md:mx-[80px] mx-[110px]'>
                     {mangaData && mangaData.data && mangaData.data.map((manga) => (
-                        <div key={manga.id} className='shadow-lg w-[420px] overflow-hidden'>
-                            <h1 className="text-[40px]" onClick={() => handleMangaClick(manga.id)}>{manga.attributes.title?.en}</h1>
-                            <p className="text-black">{manga.attributes.description?.en}</p>
+                        <div key={manga.id} className='shadow-lg w-[420px] overflow-hidden flex flex-col items-center justify-center'>
+                            <h1 className="text-[40px] cursor-pointer" onClick={() => handleMangaClick(manga.id)}>{manga.attributes.title?.en}</h1>
+                            <p className="text-black text-[12px]">{manga.attributes.description?.en}</p>
                             {manga.relationships &&
                                 manga.relationships.length > 0 &&
                                 manga.relationships.map((relationship) =>
@@ -49,8 +50,8 @@ function HomeMain() {
                         </div>
                     ))}
                 </div>
-            </div>
-        </>
+            )}
+        </div>
     );
 }
 
@@ -76,17 +77,16 @@ const CoverImage = ({ coverArtId, mangaId }) => {
         fetchCoverFileName();
     }, [coverArtId]);
 
-    // Update current time every second
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentTime(Date.now());
-        }, 1000); // Interval every 1 second
+        }, 1000);
 
         return () => clearInterval(interval);
     }, []);
 
     return coverFileName ? (
-        <img src={`https://uploads.mangadex.org/covers/${mangaId}/${coverFileName}?t=${currentTime}.jpg`} alt="Manga Cover" className="w-[200px] h-auto"/>
+        <img src={`https://uploads.mangadex.org/covers/${mangaId}/${coverFileName}?t=${currentTime}.jpg`} alt="Manga Cover" className="w-[200px] h-auto" />
     ) : (
         <div>Loading cover...</div>
     );

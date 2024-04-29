@@ -6,6 +6,10 @@
     "match-sorter": "^6.3.4",
     "react-router": "^6.23.0",
     "react-router-dom": "^5.3.4",
+    "react-slick": "^0.30.2",
     "sort-by": "^0.0.2"
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.3.3"
   }
 }

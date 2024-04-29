@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Laravel\Sanctum\Contracts\HasApiTokens;
-
 
 class MangaController extends Controller
 {
@@ -24,7 +22,7 @@ class MangaController extends Controller
 
             $response = Http::withHeaders([
                 'User-Agent' => 'MyMangaApp/1.0',
-            ])->get(env('MANGADEX_API_URL') . '/manga', ['title' => $title, 'cover' => $cover]);
+            ])->get($this->baseUrl . '/manga', ['title' => $title, 'cover' => $cover]);
 
             return $response->json();
         } catch (\Exception $e) {
@@ -37,13 +35,14 @@ class MangaController extends Controller
         try {
             $response = Http::withHeaders([
                 'User-Agent' => 'MyMangaApp/1.0',
-            ])->get(env('MANGADEX_API_URL') . '/cover/' . $coverArtId);
+            ])->get($this->baseUrl . '/cover/' . $coverArtId);
             $imageUrl = $response->json()['data']['attributes']['fileName'];
             return response()->json(['imageUrl' => $imageUrl]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to fetch cover image: ' . $e->getMessage()], 500);
         }
     }
+
     public function getMangaChapters($mangaId)
     {
         try {

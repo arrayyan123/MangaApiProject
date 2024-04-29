@@ -35,7 +35,7 @@ function Navbar() {
 
   return (
     <div className='shadow-md w-[90%] fixed top-0 left-0 md:mx-[65px] my-5 rounded-full mx-[34px] z-50'>
-        <div className="md:flex bg-red-400 items-center justify-between py-4 md:px-10 px-7 rounded-full">
+        <div className="md:flex bg-blue-400 items-center justify-between py-4 md:px-10 px-7 rounded-full">
             <div className='font-bold text-2xl cursor-pointer flex items-center text-gray-800 font-geostar'>
               <span className='text-3xl text-white mr-1 pt-2'>
                 <IonIcon name='logo-ionic'></IonIcon>
@@ -45,7 +45,7 @@ function Navbar() {
             <div onClick={()=>setOpen(!open)} className="text-3xl absolute right-8 top-6 cursor-pointer md:hidden">
               <IonIcon name={open ? 'close' : 'menu'}></IonIcon>
             </div>
-            <ul className={`md:flex md:items-center md:pb-0 pb-12 absolute md:static bg-red-400 md:z-auto z-[-1] left-0
+            <ul className={`md:flex md:items-center md:pb-0 pb-12 absolute md:static bg-blue-400 md:z-auto z-[-1] left-0
             w-full md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in rounded-[40px] ${open ? 'top-20' : 'top-[-490px]'}`}>
                 <div>
                     <form onSubmit={handleSearch} className="flex items-center max-w-lg mx-auto md:my-0 my-7">   
